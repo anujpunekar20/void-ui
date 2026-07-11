@@ -5,3 +5,9 @@ storybook-static
 *.log
 npm-debug.log*
 .npm
+
+# Local tooling / assistant working files — not part of the published package
+.claude
+.vscode
+CLAUDE.md
+docs/superpowers

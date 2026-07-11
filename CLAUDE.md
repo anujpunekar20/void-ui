@@ -34,6 +34,7 @@ All colors, spacing, radii, and animation durations live in `src/styles/tokens.c
 - `--void-radius: 0px` — strict sharp edges (brutalist aesthetic, no rounded corners anywhere)
 - `--void-font-mono: 'Kode Mono', monospace` — the single typeface for the entire system
 - `--void-accent: #c160ef` — violet, used for interactive states, focus rings, active indicators
+- `--void-shadow: #3a3a3a` — hard-edged, zero-blur offset shadow (`Npx Npx 0 0`, never blurred) for raised/floating surfaces (`Button`, `Card`, `Dropdown`'s menu, `Tooltip`'s bubble, `Select`'s listbox); a blurred shadow would read as glassmorphism and break the brutalist language, so blur radius is always `0`
 - Spacing: `--void-space-xs/sm/md/lg/xl` (4/8/16/24/48px)
 - Font sizes: `--void-font-size-display` through `--void-font-size-label-sm` (48px → 12px)
 
@@ -109,6 +110,7 @@ Consumers import both via a single `import '@anuj20/void-ui/styles'` (maps to `d
 - **Aesthetic**: Brutalist minimalism + terminal precision
 - **Font**: Kode Mono (400–700 weight, loaded via Google Fonts)
 - **Radius**: 0px everywhere (no exceptions)
-- **Elevation**: tonal layering + 1px borders, zero shadows
+- **Elevation**: tonal layering + 1px borders + a hard-edged, zero-blur offset shadow (`--void-shadow`) on raised/floating surfaces — never a soft/blurred shadow, that would read as glassmorphism and break the brutalist language
 - **Accent**: violet (`#c160ef` / `#d175ff` hover) with glow rgba for focus rings
 - **Border on focus/hover**: shifts from `--void-border` (#2a2a2a) to `--void-accent`
+- **Button press ("keycap") mechanic**: `Button` sits raised above its shadow at rest, lifts slightly on `:hover` (`translate(-1px,-1px)` + shadow grows to 4px), and on `:active` translates exactly onto the shadow's offset (`translate(3px,3px)`) while the shadow collapses to `none` — the button visually bottoms out like a physical key being pressed flush, replacing the previous generic `scale(0.97)` press effect

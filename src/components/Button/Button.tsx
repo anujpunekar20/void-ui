@@ -21,18 +21,32 @@ const styles = stylex.create({
     alignItems: 'center',
     justifyContent: 'center',
     whiteSpace: 'nowrap',
+    boxShadow: `3px 3px 0 0 ${tokens.shadow}`,
     transition: `all ${tokens.durationBase} ${tokens.easeOut}`,
+    ':hover': {
+      transform: 'translate(-1px, -1px)',
+      boxShadow: `4px 4px 0 0 ${tokens.shadow}`,
+    },
     ':focus-visible': {
       outline: `2px solid ${tokens.accent}`,
       outlineOffset: '2px',
       boxShadow: `0 0 0 4px ${tokens.accentGlow}`,
     },
     ':active': {
-      transform: 'scale(0.97)',
+      transform: 'translate(3px, 3px)',
+      boxShadow: 'none',
     },
     ':disabled': {
       cursor: 'not-allowed',
       opacity: 0.4,
+      transform: 'none',
+      boxShadow: `3px 3px 0 0 ${tokens.shadow}`,
+      // Belt-and-suspenders: StyleX assigns :hover/:active a higher pseudo
+      // priority than :disabled, so those overrides above could lose the
+      // cascade if a disabled button is hovered. pointer-events: none stops
+      // the browser from ever entering hover/active state on the element at
+      // all, which doesn't depend on cascade order.
+      pointerEvents: 'none',
     },
   },
   sm: {

@@ -21,6 +21,10 @@
   /* Destructive */
   --void-destructive:    #ef4444;
 
+  /* Shadow — hard-edged, zero-blur offset; matches border-strong so it reads
+     as a solid gray block, not a soft glow */
+  --void-shadow:         #3a3a3a;
+
   /* Shape — 0px enforces the brutalist sharp-edge aesthetic */
   --void-radius:         0px;
 

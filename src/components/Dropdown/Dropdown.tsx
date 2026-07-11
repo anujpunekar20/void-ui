@@ -49,6 +49,7 @@ const styles = stylex.create({
     borderStyle: 'solid',
     borderColor: tokens.border,
     borderRadius: tokens.radius,
+    boxShadow: `3px 3px 0 0 ${tokens.shadow}`,
     minWidth: '160px',
     maxHeight: '320px',
     overflowY: 'auto',

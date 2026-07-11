@@ -1,0 +1,62 @@
+:root {
+  /* Backgrounds */
+  --void-bg-base:        #0a0a0a;
+  --void-bg-elevated:    #111111;
+  --void-bg-overlay:     #1a1a1a;
+
+  /* Borders */
+  --void-border:         #2a2a2a;
+  --void-border-strong:  #3a3a3a;
+
+  /* Text */
+  --void-text-primary:   #f0f0f0;
+  --void-text-muted:     #888888;
+  --void-text-disabled:  #444444;
+
+  /* Accent (violet) */
+  --void-accent:         #c160ef;
+  --void-accent-hover:   #d175ff;
+  --void-accent-glow:    rgba(193, 96, 239, 0.2);
+
+  /* Destructive */
+  --void-destructive:    #ef4444;
+
+  /* Shape — 0px enforces the brutalist sharp-edge aesthetic */
+  --void-radius:         0px;
+
+  /* Typography */
+  --void-font-mono:      'Kode Mono', monospace;
+
+  /* Font sizes */
+  --void-font-size-display:  48px;
+  --void-font-size-hl:       32px;
+  --void-font-size-hm:       24px;
+  --void-font-size-body-lg:  18px;
+  --void-font-size-body:     16px;
+  --void-font-size-label:    14px;
+  --void-font-size-label-sm: 12px;
+
+  /* Spacing (4px base unit) */
+  --void-space-xs:  4px;
+  --void-space-sm:  8px;
+  --void-space-md:  16px;
+  --void-space-lg:  24px;
+  --void-space-xl:  48px;
+
+  /* Animation durations */
+  --void-duration-fast:  100ms;
+  --void-duration-base:  200ms;
+  --void-duration-slow:  350ms;
+
+  /* Animation easings */
+  --void-ease-out:       cubic-bezier(0.16, 1, 0.3, 1);
+  --void-ease-in-out:    cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --void-duration-fast: 0ms;
+    --void-duration-base: 0ms;
+    --void-duration-slow: 0ms;
+  }
+}

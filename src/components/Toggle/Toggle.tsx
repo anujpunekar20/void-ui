@@ -27,6 +27,9 @@ const styles = stylex.create({
     cursor: 'pointer',
     width: 'fit-content',
   },
+  wrapperDisabled: {
+    cursor: 'not-allowed',
+  },
   track: {
     appearance: 'none',
     position: 'relative',
@@ -55,6 +58,11 @@ const styles = stylex.create({
     ':disabled': {
       cursor: 'not-allowed',
       opacity: 0.4,
+      // StyleX assigns :hover a higher pseudo priority than :disabled, so
+      // borderColor: accent from :hover above could still win the cascade
+      // when a disabled track is hovered. pointer-events: none stops the
+      // browser from ever entering hover state on the element at all.
+      pointerEvents: 'none',
     },
     '::after': {
       content: '""',
@@ -92,7 +100,7 @@ const styles = stylex.create({
   },
 });
 
-export function Toggle({ label, error, id, checked, defaultChecked, onChange, ...props }: ToggleProps) {
+export function Toggle({ label, error, id, checked, defaultChecked, disabled, onChange, ...props }: ToggleProps) {
   const generatedId = useId();
   const toggleId = id ?? generatedId;
 
@@ -102,7 +110,7 @@ export function Toggle({ label, error, id, checked, defaultChecked, onChange, ..
 
   return (
     <div {...stylex.props(styles.root)}>
-      <label htmlFor={toggleId} {...stylex.props(styles.wrapper)}>
+      <label htmlFor={toggleId} {...stylex.props(styles.wrapper, disabled && styles.wrapperDisabled)}>
         <input
           type="checkbox"
           role="switch"
@@ -110,6 +118,7 @@ export function Toggle({ label, error, id, checked, defaultChecked, onChange, ..
           checked={isControlled ? checked : undefined}
           defaultChecked={isControlled ? undefined : defaultChecked}
           aria-checked={isChecked}
+          disabled={disabled}
           onChange={(e) => {
             onChange?.(e);
             if (!isControlled) setCheckedState(e.target.checked);

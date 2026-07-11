@@ -25,6 +25,8 @@ export const tokens = stylex.defineConsts({
 
   destructive: 'var(--void-destructive)',
 
+  shadow: 'var(--void-shadow)',
+
   radius: 'var(--void-radius)',
 
   fontMono: 'var(--void-font-mono)',

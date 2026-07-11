@@ -24,6 +24,9 @@ const styles = stylex.create({
     cursor: 'pointer',
     width: 'fit-content',
   },
+  wrapperDisabled: {
+    cursor: 'not-allowed',
+  },
   box: {
     appearance: 'none',
     margin: 0,
@@ -54,6 +57,11 @@ const styles = stylex.create({
     ':disabled': {
       cursor: 'not-allowed',
       opacity: 0.4,
+      // StyleX assigns :hover a higher pseudo priority than :disabled, so
+      // borderColor: accent from :hover above could still win the cascade
+      // when a disabled box is hovered. pointer-events: none stops the
+      // browser from ever entering hover state on the element at all.
+      pointerEvents: 'none',
     },
   },
   boxError: {
@@ -74,16 +82,17 @@ const styles = stylex.create({
   },
 });
 
-export function Checkbox({ label, error, id, ...props }: CheckboxProps) {
+export function Checkbox({ label, error, id, disabled, ...props }: CheckboxProps) {
   const generatedId = useId();
   const checkboxId = id ?? generatedId;
 
   return (
     <div {...stylex.props(styles.root)}>
-      <label htmlFor={checkboxId} {...stylex.props(styles.wrapper)}>
+      <label htmlFor={checkboxId} {...stylex.props(styles.wrapper, disabled && styles.wrapperDisabled)}>
         <input
           type="checkbox"
           id={checkboxId}
+          disabled={disabled}
           {...props}
           {...stylex.props(styles.box, !!error && styles.boxError)}
         />

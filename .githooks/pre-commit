@@ -1,0 +1,18 @@
+#!/bin/sh
+# Blocks committing common local-only / editor-tooling files that don't
+# belong in this repo (mirrors the "Local tooling" section of .gitignore,
+# plus a few common editor dirs not yet seen here).
+
+patterns='^\.claude(/|$)|^\.vscode(/|$)|^\.idea(/|$)|^\.cursor(/|$)|^CLAUDE\.md$|^AGENTS\.md$|^\.env$|^\.env\.|^docs/superpowers/'
+
+staged=$(git diff --cached --name-only)
+matches=$(echo "$staged" | grep -E "$patterns")
+
+if [ -n "$matches" ]; then
+  echo "Blocked: staged files look like local tooling config, not project files:"
+  echo "$matches" | sed 's/^/  /'
+  echo
+  echo "If intentional, add the path to .gitignore and unstage it (git restore --staged <path>)."
+  echo "To force this commit anyway: git commit --no-verify"
+  exit 1
+fi

@@ -30,13 +30,20 @@ const styles = stylex.create({
   wrapperDisabled: {
     cursor: 'not-allowed',
   },
-  track: {
-    appearance: 'none',
+  trackWrap: {
     position: 'relative',
-    margin: 0,
     width: `${TRACK_WIDTH}px`,
     height: `${TRACK_HEIGHT}px`,
     flexShrink: 0,
+  },
+  trackWrapDisabled: {
+    opacity: 0.4,
+  },
+  track: {
+    appearance: 'none',
+    position: 'absolute',
+    inset: 0,
+    margin: 0,
     borderWidth: '1px',
     borderStyle: 'solid',
     borderColor: tokens.border,
@@ -57,23 +64,11 @@ const styles = stylex.create({
     },
     ':disabled': {
       cursor: 'not-allowed',
-      opacity: 0.4,
       // StyleX assigns :hover a higher pseudo priority than :disabled, so
       // borderColor: accent from :hover above could still win the cascade
       // when a disabled track is hovered. pointer-events: none stops the
       // browser from ever entering hover state on the element at all.
       pointerEvents: 'none',
-    },
-    '::after': {
-      content: '""',
-      position: 'absolute',
-      top: `${THUMB_INSET}px`,
-      left: `${THUMB_INSET}px`,
-      width: `${THUMB_SIZE}px`,
-      height: `${THUMB_SIZE}px`,
-      backgroundColor: tokens.textPrimary,
-      transform: 'translateX(0)',
-      transition: `transform ${tokens.durationBase} ${tokens.easeOut}`,
     },
   },
   trackError: {
@@ -82,11 +77,23 @@ const styles = stylex.create({
       boxShadow: '0 0 0 3px rgba(239, 68, 68, 0.2)',
     },
   },
-  trackChecked: {
-    '::after': {
-      transform: `translateX(${THUMB_TRAVEL}px)`,
-      backgroundColor: tokens.bgBase,
-    },
+  // The thumb is a sibling span rather than the input's ::after: <input> is
+  // a replaced element, and browsers don't render generated content on
+  // replaced elements, so a pseudo-element thumb never paints.
+  thumb: {
+    position: 'absolute',
+    top: `${THUMB_INSET}px`,
+    left: `${THUMB_INSET}px`,
+    width: `${THUMB_SIZE}px`,
+    height: `${THUMB_SIZE}px`,
+    backgroundColor: tokens.textPrimary,
+    transform: 'translateX(0)',
+    transition: `transform ${tokens.durationBase} ${tokens.easeOut}, background-color ${tokens.durationBase} ${tokens.easeOut}`,
+    pointerEvents: 'none',
+  },
+  thumbChecked: {
+    transform: `translateX(${THUMB_TRAVEL}px)`,
+    backgroundColor: tokens.bgBase,
   },
   label: {
     fontFamily: tokens.fontMono,
@@ -111,21 +118,24 @@ export function Toggle({ label, error, id, checked, defaultChecked, disabled, on
   return (
     <div {...stylex.props(styles.root)}>
       <label htmlFor={toggleId} {...stylex.props(styles.wrapper, disabled && styles.wrapperDisabled)}>
-        <input
-          type="checkbox"
-          role="switch"
-          id={toggleId}
-          checked={isControlled ? checked : undefined}
-          defaultChecked={isControlled ? undefined : defaultChecked}
-          aria-checked={isChecked}
-          disabled={disabled}
-          onChange={(e) => {
-            onChange?.(e);
-            if (!isControlled) setCheckedState(e.target.checked);
-          }}
-          {...props}
-          {...stylex.props(styles.track, isChecked && styles.trackChecked, !!error && styles.trackError)}
-        />
+        <span {...stylex.props(styles.trackWrap, disabled && styles.trackWrapDisabled)}>
+          <input
+            type="checkbox"
+            role="switch"
+            id={toggleId}
+            checked={isControlled ? checked : undefined}
+            defaultChecked={isControlled ? undefined : defaultChecked}
+            aria-checked={isChecked}
+            disabled={disabled}
+            onChange={(e) => {
+              onChange?.(e);
+              if (!isControlled) setCheckedState(e.target.checked);
+            }}
+            {...props}
+            {...stylex.props(styles.track, !!error && styles.trackError)}
+          />
+          <span aria-hidden {...stylex.props(styles.thumb, isChecked && styles.thumbChecked)} />
+        </span>
         {label && <span {...stylex.props(styles.label)}>{label}</span>}
       </label>
       {error && (

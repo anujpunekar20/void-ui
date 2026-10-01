@@ -30,8 +30,8 @@ const styles = stylex.create({
   box: {
     appearance: 'none',
     margin: 0,
-    width: '20px',
-    height: '20px',
+    width: '22px',
+    height: '22px',
     flexShrink: 0,
     borderWidth: '1px',
     borderStyle: 'solid',

@@ -1,0 +1,13 @@
+{
+  "projectId": "f9db6549-fbb4-4709-b07d-64bc0f0940c6",
+  "shape": "storybook",
+  "pkg": "@anuj20/void-ui",
+  "storybookStatic": ".design-sync/sb-reference",
+  "readmeHeader": ".design-sync/conventions.md",
+  "overrides": {
+    "Card": {"cardMode": "column"},
+    "Input": {"cardMode": "column"},
+    "Select": {"cardMode": "column"},
+    "Textarea": {"cardMode": "column"}
+  }
+}

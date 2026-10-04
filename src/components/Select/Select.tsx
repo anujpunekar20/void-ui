@@ -2,7 +2,9 @@ import * as stylex from '@stylexjs/stylex';
 import { tokens } from '../../styles/tokens.stylex';
 import { Children, isValidElement, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { InputHTMLAttributes, KeyboardEvent, ReactElement, ReactNode } from 'react';
+import { useFloating } from '@floating-ui/react';
 import { optionStyles } from '../Option/Option';
+import { useFloatingTransition } from '../floatingTransition';
 import type { OptionProps } from '../Option/Option';
 
 export interface SelectOption {
@@ -152,6 +154,11 @@ export function Select({
     [items, currentValue, isFiltering]
   );
 
+  // The listbox is positioned by CSS, not floating-ui; useFloating is only
+  // here to give useFloatingTransition the open state and element it tracks.
+  const { refs, context } = useFloating({ open: open && filtered.length > 0 });
+  const transition = useFloatingTransition(context);
+
   useEffect(() => {
     function handleOutsideClick(e: MouseEvent) {
       if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
@@ -235,8 +242,14 @@ export function Select({
           onKeyDown={handleKeyDown}
           {...stylex.props(styles.input, !!error && styles.inputError)}
         />
-        {open && filtered.length > 0 && (
-          <ul role="listbox" id={listboxId} {...stylex.props(styles.listbox)}>
+        {transition.isMounted && (
+          <ul
+            ref={refs.setFloating}
+            role="listbox"
+            id={listboxId}
+            style={transition.styles}
+            {...stylex.props(styles.listbox)}
+          >
             {filtered.map((item, i) => (
               <li
                 key={item.value}

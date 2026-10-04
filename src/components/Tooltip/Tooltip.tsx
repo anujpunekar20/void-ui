@@ -18,6 +18,7 @@ import {
   useRole,
 } from '@floating-ui/react';
 import type { Placement } from '@floating-ui/react';
+import { useFloatingTransition } from '../floatingTransition';
 
 // Matches --void-space-sm — floating-ui's offset() needs a raw pixel number,
 // it can't resolve a CSS custom property.
@@ -65,7 +66,9 @@ export function Tooltip({ trigger, label, placement = 'top' }: TooltipProps) {
     placement,
     middleware: [offset(TOOLTIP_GAP), flip(), shift({ padding: 8 }), arrow({ element: arrowRef })],
     whileElementsMounted: autoUpdate,
+    transform: false,
   });
+  const transition = useFloatingTransition(context);
 
   const hover = useHover(context, { delay: { open: 200, close: 0 } });
   const focus = useFocus(context);
@@ -92,12 +95,12 @@ export function Tooltip({ trigger, label, placement = 'top' }: TooltipProps) {
           })
         )}
       </span>
-      {open && (
+      {transition.isMounted && (
         <FloatingPortal>
           <div
             ref={refs.setFloating}
             id={tooltipId}
-            style={floatingStyles}
+            style={{ ...floatingStyles, ...transition.styles }}
             {...getFloatingProps()}
             {...stylex.props(styles.bubble)}
           >

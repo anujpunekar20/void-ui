@@ -1,12 +1,20 @@
 import * as stylex from '@stylexjs/stylex';
 import { tokens } from '../../styles/tokens.stylex';
 import { forwardRef } from 'react';
-import type { ButtonHTMLAttributes } from 'react';
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes, Ref } from 'react';
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonStyleProps {
   variant?: 'solid' | 'outline' | 'ghost' | 'destructive';
   size?: 'sm' | 'md' | 'lg';
 }
+
+// Passing `href` renders an <a> styled as a button (navigation); without it,
+// a <button> (an action). Never nest one inside the other.
+export type ButtonProps = ButtonStyleProps &
+  (
+    | (AnchorHTMLAttributes<HTMLAnchorElement> & { href: string })
+    | (ButtonHTMLAttributes<HTMLButtonElement> & { href?: never })
+  );
 
 const styles = stylex.create({
   base: {
@@ -21,6 +29,7 @@ const styles = stylex.create({
     alignItems: 'center',
     justifyContent: 'center',
     whiteSpace: 'nowrap',
+    textDecoration: 'none',
     boxShadow: `3px 3px 0 0 ${tokens.shadow}`,
     transition: `all ${tokens.durationBase} ${tokens.easeOut}`,
     ':hover': {
@@ -108,12 +117,22 @@ const styles = stylex.create({
   },
 });
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { variant = 'solid', size = 'md', children, ...props },
-  ref
-) {
+export const Button = forwardRef<
+  HTMLButtonElement | HTMLAnchorElement,
+  ButtonProps
+>(function Button({ variant = 'solid', size = 'md', children, ...props }, ref) {
+  const styleProps = stylex.props(styles.base, styles[size], styles[variant]);
+
+  if (props.href !== undefined) {
+    return (
+      <a ref={ref as Ref<HTMLAnchorElement>} {...props} {...styleProps}>
+        {children}
+      </a>
+    );
+  }
+
   return (
-    <button ref={ref} {...props} {...stylex.props(styles.base, styles[size], styles[variant])}>
+    <button ref={ref as Ref<HTMLButtonElement>} {...props} {...styleProps}>
       {children}
     </button>
   );

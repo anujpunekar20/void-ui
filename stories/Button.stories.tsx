@@ -58,3 +58,14 @@ export const DisabledStates: Story = {
     </div>
   ),
 };
+
+export const AsLink: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+      <Button href="#">Solid link</Button>
+      <Button variant="outline" href="mailto:hi@example.com">
+        Outline link
+      </Button>
+    </div>
+  ),
+};

@@ -31,7 +31,9 @@ const styles = stylex.create({
     whiteSpace: 'nowrap',
     textDecoration: 'none',
     boxShadow: `3px 3px 0 0 ${tokens.shadow}`,
-    transition: `all ${tokens.durationBase} ${tokens.easeOut}`,
+    transitionProperty: 'transform, box-shadow, background-color, color, border-color, filter',
+    transitionDuration: tokens.durationBase,
+    transitionTimingFunction: tokens.easeOut,
     ':hover': {
       transform: 'translate(-1px, -1px)',
       boxShadow: `4px 4px 0 0 ${tokens.shadow}`,

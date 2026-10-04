@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createRef } from 'react';
 import { describe, expect, it, vi } from 'vitest';
@@ -38,7 +38,7 @@ describe('Dropdown', () => {
     await user.click(screen.getByRole('menuitem', { name: 'Edit' }));
 
     expect(onSelect).toHaveBeenCalledOnce();
-    expect(screen.queryByRole('menu')).toBeNull();
+    await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
   });
 
   it('closes on Escape', async () => {
@@ -49,7 +49,7 @@ describe('Dropdown', () => {
     expect(screen.queryByRole('menu')).not.toBeNull();
 
     await user.keyboard('{Escape}');
-    expect(screen.queryByRole('menu')).toBeNull();
+    await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
   });
 
   it('accepts a custom placement without breaking open/close behavior', async () => {
@@ -60,7 +60,7 @@ describe('Dropdown', () => {
     expect(screen.queryByRole('menu')).not.toBeNull();
 
     await user.keyboard('{Escape}');
-    expect(screen.queryByRole('menu')).toBeNull();
+    await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
   });
 
   it('works with the library Button component as trigger (forwardRef wiring)', async () => {

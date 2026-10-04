@@ -21,6 +21,7 @@ export const optionStyles = stylex.create({
     paddingRight: tokens.spaceMd,
     cursor: 'pointer',
     userSelect: 'none',
+    transition: `background-color ${tokens.durationBase} ${tokens.easeOut}, color ${tokens.durationBase} ${tokens.easeOut}`,
   },
   optionActive: {
     backgroundColor: tokens.accentGlow,

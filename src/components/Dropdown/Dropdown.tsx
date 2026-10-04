@@ -18,6 +18,7 @@ import {
 } from '@floating-ui/react';
 import type { Placement } from '@floating-ui/react';
 import { optionStyles } from '../Option/Option';
+import { useFloatingTransition } from '../floatingTransition';
 
 // floating-ui's offset() needs a raw pixel number, it can't resolve a CSS
 // custom property.
@@ -75,7 +76,9 @@ export function Dropdown({ trigger, items, placement = 'bottom-start' }: Dropdow
     placement,
     middleware: [offset(MENU_GAP), flip(), shift({ padding: 8 })],
     whileElementsMounted: autoUpdate,
+    transform: false,
   });
+  const transition = useFloatingTransition(context);
 
   const click = useClick(context);
   const dismiss = useDismiss(context);
@@ -120,13 +123,13 @@ export function Dropdown({ trigger, items, placement = 'bottom-start' }: Dropdow
           })
         )}
       </span>
-      {open && (
+      {transition.isMounted && (
         <FloatingPortal>
           <FloatingFocusManager context={context} modal={false}>
             <ul
               ref={refs.setFloating}
               id={menuId}
-              style={floatingStyles}
+              style={{ ...floatingStyles, ...transition.styles }}
               {...getFloatingProps()}
               {...stylex.props(styles.menu)}
             >

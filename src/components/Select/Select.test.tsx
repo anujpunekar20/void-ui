@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { Select } from './Select';
@@ -30,7 +30,7 @@ describe('Select', () => {
     await user.keyboard('{ArrowDown}{ArrowDown}{Enter}');
 
     expect(input.value).toBe('Vue');
-    expect(screen.queryByRole('listbox')).toBeNull();
+    await waitFor(() => expect(screen.queryByRole('listbox')).toBeNull());
   });
 
   it('keeps free text that does not match any option', async () => {

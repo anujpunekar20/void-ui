@@ -38,17 +38,23 @@ const styles = stylex.create({
     borderColor: tokens.border,
     borderRadius: tokens.radius,
     backgroundColor: tokens.bgElevated,
+    // The tick is always painted but sized to 0 until checked, so it can
+    // scale up from the center instead of popping in. (A clip-path wipe on
+    // ::before isn't possible: StyleX compiles ':checked' nested in
+    // '::before' to '::before:checked', which never matches.)
+    backgroundImage: CHECK_ICON,
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
+    backgroundSize: '0%',
     cursor: 'pointer',
-    transition: `border-color ${tokens.durationBase} ${tokens.easeOut}, background-color ${tokens.durationBase} ${tokens.easeOut}, box-shadow ${tokens.durationBase} ${tokens.easeOut}`,
+    transition: `border-color ${tokens.durationBase} ${tokens.easeOut}, background-color ${tokens.durationBase} ${tokens.easeOut}, box-shadow ${tokens.durationBase} ${tokens.easeOut}, background-size ${tokens.durationBase} ${tokens.easeOut}`,
     ':hover': {
       borderColor: tokens.accent,
     },
     ':checked': {
       backgroundColor: tokens.accent,
       borderColor: tokens.accent,
-      backgroundImage: CHECK_ICON,
+      backgroundSize: '100%',
     },
     ':focus-visible': {
       outline: 'none',

@@ -1,0 +1,999 @@
+/* Landing page styles. Every color, space, and duration comes from the
+   --void-* tokens, so the theming panel re-skins this page along with the
+   components it demonstrates. */
+
+:root {
+  --rail-out: 1rem; /* outer rail, from the screen edge */
+  --inset: 2rem; /* inner rail: where content and full-bleed rules start */
+  --pad: 1.5rem; /* text padding inside the rails */
+  --hatch: repeating-linear-gradient(-45deg, var(--void-border) 0 1px, transparent 1px 0.375rem);
+  --key-shadow: 3px 3px 0 0 var(--void-shadow);
+  color-scheme: dark;
+  scrollbar-color: var(--void-border-strong) var(--void-bg-base);
+  accent-color: var(--void-accent);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 4.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--void-bg-base);
+  color: var(--void-text-primary);
+  font-family: var(--void-font-mono);
+  font-size: var(--void-font-size-body);
+  line-height: 1.6;
+  caret-color: var(--void-accent);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Blueprint rails: a hatched double rule down each screen edge. */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: calc(var(--inset) - var(--rail-out));
+  border-inline: 1px solid var(--void-border);
+  background: var(--hatch);
+  pointer-events: none;
+  z-index: 20;
+}
+
+body::before {
+  left: var(--rail-out);
+}
+
+body::after {
+  right: var(--rail-out);
+}
+
+::selection {
+  background: var(--void-accent);
+  color: var(--void-bg-base);
+}
+
+:focus-visible {
+  outline: 2px solid var(--void-accent);
+  outline-offset: 2px;
+}
+
+a {
+  color: var(--void-text-primary);
+  text-decoration-line: underline;
+  text-decoration-color: var(--void-border-strong);
+  text-underline-offset: 0.3em;
+  transition:
+    color var(--void-duration-fast) var(--void-ease-out),
+    text-decoration-color var(--void-duration-fast) var(--void-ease-out);
+}
+
+a:hover {
+  color: var(--void-accent);
+  text-decoration-color: currentColor;
+}
+
+code,
+pre {
+  font-family: var(--void-font-mono);
+}
+
+p code {
+  color: var(--void-text-primary);
+  white-space: nowrap;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h2 {
+  font-size: var(--void-font-size-hm);
+  font-weight: 700;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip {
+  position: absolute;
+  left: var(--inset);
+  top: -3rem;
+  z-index: 40;
+  padding: var(--void-space-sm) var(--void-space-md);
+  background: var(--void-accent);
+  color: var(--void-bg-base);
+}
+
+.skip:focus {
+  top: var(--void-space-sm);
+}
+
+.page {
+  padding-inline: var(--inset);
+}
+
+/* ---------- Keys: the bespoke pressable, same contract as Button ---------- */
+
+.key {
+  font: inherit;
+  font-size: var(--void-font-size-label);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--void-bg-base);
+  background: var(--void-accent);
+  border: 1px solid var(--void-accent);
+  border-radius: var(--void-radius);
+  padding: var(--void-space-sm) var(--void-space-md);
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: var(--key-shadow);
+  transition:
+    transform var(--void-duration-base) var(--void-ease-out),
+    box-shadow var(--void-duration-base) var(--void-ease-out),
+    background-color var(--void-duration-base) var(--void-ease-out),
+    color var(--void-duration-base) var(--void-ease-out);
+}
+
+.key:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 0 var(--void-shadow);
+}
+
+.key:active {
+  transform: translate(3px, 3px);
+  box-shadow: none;
+  transition-duration: var(--void-duration-fast);
+}
+
+.key-quiet {
+  color: var(--void-text-primary);
+  background: var(--void-bg-elevated);
+  border-color: var(--void-border-strong);
+}
+
+.key-quiet:hover,
+.key-quiet[aria-pressed='true'] {
+  color: var(--void-accent);
+  border-color: var(--void-accent);
+}
+
+/* ---------- Nav ---------- */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: var(--void-space-md);
+  height: 4rem;
+  padding-inline: var(--pad);
+  background: var(--void-bg-base);
+  border-bottom: 1px solid var(--void-border);
+}
+
+.mark {
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.cursor {
+  color: var(--void-accent);
+}
+
+.nav-link {
+  margin-left: auto;
+  color: var(--void-text-muted);
+  font-size: var(--void-font-size-label);
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  color: var(--void-accent);
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  display: grid;
+  gap: var(--void-space-lg);
+  padding: var(--void-space-xl) var(--pad);
+  border-bottom: 1px solid var(--void-border);
+}
+
+.wordmark-void {
+  /* Rendered as a text selection, the same colors as ::selection. */
+  background: linear-gradient(var(--void-accent), var(--void-accent)) no-repeat;
+  color: var(--void-bg-base);
+}
+
+.wordmark {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.hero-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: var(--void-space-lg);
+}
+
+.thesis {
+  color: var(--void-text-muted);
+  max-width: 44ch;
+}
+
+.install {
+  display: flex;
+  max-width: 100%;
+  align-items: stretch;
+  gap: var(--void-space-sm);
+}
+
+.install code {
+  display: flex;
+  align-items: center;
+  gap: var(--void-space-sm);
+  padding: var(--void-space-sm) var(--void-space-md);
+  background: var(--void-bg-elevated);
+  border: 1px solid var(--void-border-strong);
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Copy confirms with a violet sweep across the command it just copied. */
+.install:has(.copy-key[data-state='copied']) code::after,
+.step-code:has(.copy-key[data-state='copied']) pre::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--void-accent-glow);
+  transform-origin: left;
+  animation: sweep 700ms var(--void-ease-out) both;
+  pointer-events: none;
+}
+
+@keyframes sweep {
+  0% {
+    transform: scaleX(0);
+  }
+  55% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+
+.prompt {
+  color: var(--void-text-muted);
+}
+
+.copy-key {
+  min-width: 7.5rem;
+}
+
+/* ---------- Stages: one live instance per component ---------- */
+
+.stage {
+  position: relative;
+  background: var(--void-bg-base);
+}
+
+/* An open Select listbox must paint over the caption row, not under it. */
+.stage:focus-within {
+  z-index: 2;
+}
+
+.stage-body {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  padding: var(--void-space-xl) var(--pad);
+  /* The blueprint grid the specimen sits on. */
+}
+
+.specimen {
+  max-width: 100%;
+  animation: enter-next var(--void-duration-slow) var(--void-ease-out) both;
+}
+
+/* Every state change enters sideways: forward from the right, back from the
+   left. The durations token is 0ms under reduced motion, so this vanishes. */
+.specimen[data-dir='prev'] {
+  animation-name: enter-prev;
+}
+
+/* The outgoing state, sharing the grid cell with the incoming one: it leaves
+   faster than the new state arrives, toward the opposite side. */
+.stage-body > .specimen {
+  grid-area: 1 / 1;
+}
+
+.ghost {
+  pointer-events: none;
+  animation: exit-next 280ms var(--void-ease-out) forwards;
+}
+
+.ghost[data-dir='prev'] {
+  animation-name: exit-prev;
+}
+
+@keyframes exit-next {
+  to {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateX(-2rem);
+  }
+}
+
+@keyframes exit-prev {
+  to {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateX(2rem);
+  }
+}
+
+/* Switching component moves the stage's text with it, from the tab's side. */
+.stage .stage-caption > div,
+.stage .chips {
+  animation: enter-next var(--void-duration-slow) var(--void-ease-out) backwards;
+}
+
+.stage[data-enter='prev'] .stage-caption > div,
+.stage[data-enter='prev'] .chips {
+  animation-name: enter-prev;
+}
+
+@keyframes enter-next {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateX(2rem);
+  }
+}
+
+@keyframes enter-prev {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateX(-2rem);
+  }
+}
+
+.stage-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--void-space-xs);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--void-space-xs);
+}
+
+.chip {
+  position: relative;
+  overflow: hidden;
+  font: inherit;
+  font-size: var(--void-font-size-label-sm);
+  letter-spacing: 0.05em;
+  color: var(--void-text-muted);
+  background: var(--void-bg-base);
+  border: 1px solid var(--void-border);
+  padding: 2px var(--void-space-sm);
+  cursor: pointer;
+  transition:
+    color var(--void-duration-base) var(--void-ease-out),
+    border-color var(--void-duration-base) var(--void-ease-out);
+}
+
+.chip:hover {
+  color: var(--void-text-primary);
+  border-color: var(--void-border-strong);
+}
+
+.chip[aria-pressed='true'] {
+  color: var(--void-text-primary);
+  border-color: var(--void-border-strong);
+}
+
+/* The active state's fuse: fills for exactly one step, then the state changes. */
+.stage[data-playing] .chips .chip[aria-pressed='true']::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 2px;
+  background: var(--void-accent);
+  transform-origin: left;
+  animation: fuse var(--step) linear forwards;
+}
+
+@keyframes fuse {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+.stage-play {
+  margin-left: var(--void-space-sm);
+}
+
+.stage-caption {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--void-space-md);
+  padding: var(--void-space-md) var(--pad);
+}
+
+.stage-caption h3 {
+  margin: 0;
+  font-size: var(--void-font-size-body);
+}
+
+.stage-caption p {
+  margin: 0;
+  color: var(--void-text-muted);
+  font-size: var(--void-font-size-label);
+}
+
+.stage-caption a {
+  flex-shrink: 0;
+  font-size: var(--void-font-size-label);
+}
+
+.showcase {
+  border-bottom: 1px solid var(--void-border);
+}
+
+.tabs {
+  position: relative;
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--void-border);
+}
+
+.tab {
+  flex-shrink: 0;
+  font: inherit;
+  font-size: var(--void-font-size-label);
+  color: var(--void-text-muted);
+  background: none;
+  border: 0;
+  border-right: 1px solid var(--void-border);
+  padding: var(--void-space-md) var(--void-space-lg);
+  cursor: pointer;
+  transition: color var(--void-duration-base) var(--void-ease-out);
+}
+
+.tab:hover {
+  color: var(--void-text-primary);
+}
+
+.tab[aria-pressed='true'] {
+  color: var(--void-text-primary);
+}
+
+/* The single underline that glides to whichever tab is active. */
+.tab-ink {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--void-accent);
+  pointer-events: none;
+  transition:
+    transform var(--void-duration-slow) var(--void-ease-out),
+    width var(--void-duration-slow) var(--void-ease-out);
+}
+
+.stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    'body body'
+    'caption controls';
+}
+
+.stage .stage-body {
+  grid-area: body;
+  min-height: min(44svh, 26rem);
+}
+
+.stage .specimen {
+  zoom: 1.6;
+}
+
+.stage .stage-caption {
+  grid-area: caption;
+  border-top: 1px solid var(--void-border);
+}
+
+.stage .stage-controls {
+  grid-area: controls;
+  justify-content: flex-end;
+  padding: var(--void-space-md) var(--pad);
+  border-top: 1px solid var(--void-border);
+}
+
+/* ---------- Sections ---------- */
+
+.section {
+  border-bottom: 1px solid var(--void-border);
+}
+
+.section-head {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: var(--void-space-xl);
+  align-items: end;
+  padding: var(--void-space-xl) var(--pad);
+  border-top: 1px solid var(--void-border);
+}
+
+.section-head p {
+  color: var(--void-text-muted);
+  max-width: 62ch;
+}
+
+/* Theming */
+
+.theming-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 4fr) minmax(0, 4fr);
+  border-top: 1px solid var(--void-border);
+}
+
+.theming-grid > * {
+  padding: var(--void-space-lg) var(--pad);
+  border-right: 1px solid var(--void-border);
+}
+
+.theming-grid > :last-child {
+  border-right: 0;
+}
+
+.theme-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--void-space-lg);
+}
+
+fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+legend {
+  padding: 0;
+  margin-bottom: var(--void-space-sm);
+  color: var(--void-text-muted);
+  font-size: var(--void-font-size-label-sm);
+  letter-spacing: 0.125rem;
+  text-transform: uppercase;
+}
+
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--void-space-sm);
+}
+
+.swatch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--void-space-sm);
+  font: inherit;
+  font-size: var(--void-font-size-label);
+  color: var(--void-text-muted);
+  background: none;
+  border: 1px solid var(--void-border);
+  padding: var(--void-space-xs) var(--void-space-sm);
+  cursor: pointer;
+  text-transform: capitalize;
+}
+
+.swatch:hover,
+.swatch[aria-pressed='true'] {
+  color: var(--void-text-primary);
+  border-color: var(--void-accent);
+}
+
+.swatch-chip {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.swatch input[type='color'] {
+  width: 1rem;
+  height: 1rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.theme-preview {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--void-space-lg);
+}
+
+.preview-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--void-space-md);
+}
+
+.theme-code {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--void-space-md);
+}
+
+pre {
+  position: relative;
+  margin: 0;
+  width: 100%;
+  padding: var(--void-space-md);
+  background: var(--void-bg-elevated);
+  border: 1px solid var(--void-border);
+  font-size: var(--void-font-size-label);
+  line-height: 1.7;
+  overflow-x: auto;
+}
+
+/* Install steps */
+
+.steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+  border-top: 1px solid var(--void-border);
+}
+
+.step {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: var(--void-space-xl);
+  padding: var(--void-space-lg) var(--pad);
+  border-bottom: 1px solid var(--void-border);
+}
+
+.step:last-child {
+  border-bottom: 0;
+}
+
+.step-text h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.step-text h3::before {
+  content: counter(step) '  ';
+  color: var(--void-text-muted);
+  white-space: pre;
+}
+
+.step-text p {
+  margin-top: var(--void-space-xs);
+  color: var(--void-text-muted);
+  font-size: var(--void-font-size-label);
+}
+
+.step-code {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--void-space-sm);
+}
+
+/* ---------- Close ---------- */
+
+.close {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--void-space-lg);
+  padding: var(--void-space-xl) var(--pad);
+}
+
+.close .steps {
+  align-self: stretch;
+}
+
+.close-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--void-space-md);
+}
+
+.colophon {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--void-space-sm) var(--void-space-lg);
+  width: 100%;
+  margin-top: var(--void-space-xl);
+  padding-top: var(--void-space-md);
+  border-top: 1px solid var(--void-border);
+  color: var(--void-text-muted);
+  font-size: var(--void-font-size-label-sm);
+  letter-spacing: 0.05em;
+}
+
+.colophon a {
+  color: var(--void-text-muted);
+}
+
+/* ---------- Motion: the boot sequence and supporting moments ---------- */
+
+/* Registered so a theme change fades through the page instead of snapping. */
+@property --void-accent {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #c160ef;
+}
+
+@property --void-shadow {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #3a3a3a;
+}
+
+:root {
+  transition:
+    --void-accent var(--void-duration-slow) var(--void-ease-out),
+    --void-shadow var(--void-duration-slow) var(--void-ease-out);
+}
+
+.type,
+.caret {
+  display: inline-block;
+}
+
+.caret {
+  color: var(--void-accent);
+}
+
+.arrow {
+  display: inline-block;
+  transition: transform var(--void-duration-base) var(--void-ease-out);
+}
+
+a:hover .arrow {
+  transform: translate(2px, -2px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* The name types in one glyph at a time (Kode Mono: 7 glyphs, 0.6em each),
+     the caret riding the last one, then blinks a few times and rests. */
+  .type {
+    animation: type 700ms steps(7, end) 150ms backwards;
+  }
+
+  /* Once typed, VOID gets selected one glyph at a time, like shift+arrow. */
+  .wordmark-void {
+    animation: select 320ms steps(4, end) 900ms backwards;
+  }
+
+  .caret {
+    animation:
+      caret-ride 700ms steps(7, end) 150ms backwards,
+      blink 1s steps(1) 900ms 4;
+  }
+
+  .thesis {
+    animation: rise 500ms var(--void-ease-out) 850ms backwards;
+  }
+
+  /* The install key pops up out of its shadow: a press played in reverse. */
+  .hero .install code {
+    animation: key-rise 450ms var(--void-ease-out) 1000ms backwards;
+  }
+
+  .hero .copy-key {
+    animation: key-rise 450ms var(--void-ease-out) 1080ms backwards;
+  }
+
+  .showcase {
+    animation: rise 600ms var(--void-ease-out) 1150ms backwards;
+  }
+
+  /* Install steps assemble as they scroll in, where the browser can tie
+     motion to scroll; elsewhere they are simply there. */
+  @supports (animation-timeline: view()) {
+    .step {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 30%;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Page-wide reveal (site/reveal.ts): children of a [data-reveal] block wait
+     below and soft, then cascade in reading order once it scrolls into view. */
+  [data-reveal] > * {
+    transition:
+      opacity 700ms var(--void-ease-out),
+      transform 700ms var(--void-ease-out),
+      filter 700ms var(--void-ease-out);
+    transition-delay: calc(var(--i, 0) * 90ms);
+  }
+
+  [data-reveal]:not([data-shown]) > * {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(1.25rem);
+  }
+
+  /* Anything on screen at load waits for the hero boot to finish. */
+  [data-boot] [data-reveal] > * {
+    transition-delay: calc(1300ms + var(--i, 0) * 90ms);
+  }
+}
+
+@keyframes select {
+  from {
+    background-size: 0 100%;
+    color: var(--void-text-primary);
+  }
+}
+
+@keyframes type {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+
+@keyframes caret-ride {
+  from {
+    transform: translateX(-4.2em);
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}
+
+@keyframes key-rise {
+  from {
+    opacity: 0;
+    transform: translate(3px, 3px);
+    box-shadow: none;
+  }
+}
+
+/* ---------- Touch ---------- */
+
+@media (pointer: coarse) {
+  .chip,
+  .tab,
+  .swatch {
+    min-height: 2.75rem;
+  }
+}
+
+/* ---------- Narrow screens ---------- */
+
+@media (max-width: 64rem) {
+  .hero-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .theming-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .theme-code {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--void-border);
+  }
+  .theme-preview {
+    border-right: 0;
+  }
+}
+
+@media (max-width: 40rem) {
+  :root {
+    --rail-out: 0.375rem;
+    --inset: 1rem;
+    --pad: 1rem;
+  }
+  .nav-link {
+    display: none;
+  }
+  .nav > :last-child {
+    margin-left: auto;
+  }
+  .stage .specimen {
+    zoom: 1.25;
+  }
+  .stage {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'body'
+      'controls'
+      'caption';
+  }
+  .stage .stage-controls {
+    justify-content: flex-start;
+  }
+  .stage .stage-body {
+    min-height: 22rem;
+  }
+  .hero-row,
+  .section-head,
+  .step,
+  .theming-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .section-head {
+    gap: var(--void-space-md);
+    padding-top: var(--void-space-xl);
+  }
+  .install code {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+  }
+  .copy-key {
+    min-width: 0;
+  }
+  .theming-grid > * {
+    border-right: 0;
+    border-bottom: 1px solid var(--void-border);
+  }
+  .step-code {
+    flex-direction: column;
+  }
+}

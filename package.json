@@ -43,8 +43,10 @@
     "dev": "storybook dev -p 6006",
     "build": "vite build && node -e \"const fs=require('fs');const t=fs.existsSync('dist/style.css')?fs.readFileSync('dist/style.css','utf8'):'';const s=fs.existsSync('dist/assets/stylex.css')?fs.readFileSync('dist/assets/stylex.css','utf8'):'';fs.writeFileSync('dist/index.css',t+s);\"",
     "build-storybook": "storybook build",
+    "site:dev": "vite --config site/vite.config.ts",
+    "site:build": "vite build --config site/vite.config.ts",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src --ext .ts,.tsx",
+    "lint": "eslint src site --ext .ts,.tsx",
     "test": "vitest",
     "prepublishOnly": "npm run build",
     "prepare": "git config core.hooksPath .githooks 2>/dev/null || true"

@@ -43,20 +43,6 @@ function CopyKey({ text, label = 'Copy' }: { text: string; label?: string }) {
   );
 }
 
-function Install() {
-  return (
-    <div className="install">
-      <code>
-        <span className="prompt" aria-hidden="true">
-          $
-        </span>
-        {INSTALL}
-      </code>
-      <CopyKey text={INSTALL} />
-    </div>
-  );
-}
-
 function Nav() {
   return (
     <nav className="nav" aria-label="Primary">
@@ -92,7 +78,15 @@ function Hero() {
           Dark-first React components with zero radius, hard zero-blur shadows, and one violet
           light.
         </p>
-        <Install />
+        <div className="install">
+          <code>
+            <span className="prompt" aria-hidden="true">
+              $
+            </span>
+            {INSTALL}
+          </code>
+          <CopyKey text={INSTALL} />
+        </div>
       </div>
     </header>
   );

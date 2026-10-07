@@ -172,8 +172,7 @@ h2 {
   border-color: var(--void-border-strong);
 }
 
-.key-quiet:hover,
-.key-quiet[aria-pressed='true'] {
+.key-quiet:hover {
   color: var(--void-accent);
   border-color: var(--void-accent);
 }
@@ -302,8 +301,15 @@ h2 {
 
 /* ---------- Stages: one live instance per component ---------- */
 
+/* --d is the slide side: 1 enters from the right (forward), -1 from the left. */
 .stage {
+  --d: 1;
   position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    'body body'
+    'caption controls';
   background: var(--void-bg-base);
 }
 
@@ -313,87 +319,67 @@ h2 {
 }
 
 .stage-body {
+  grid-area: body;
   display: grid;
   place-items: center;
   min-width: 0;
+  min-height: min(44svh, 26rem);
   padding: var(--void-space-xl) var(--pad);
-  /* The blueprint grid the specimen sits on. */
 }
 
+/* Every state change enters sideways. The durations token is 0ms under
+   reduced motion, so this vanishes. */
 .specimen {
-  max-width: 100%;
-  animation: enter-next var(--void-duration-slow) var(--void-ease-out) both;
-}
-
-/* Every state change enters sideways: forward from the right, back from the
-   left. The durations token is 0ms under reduced motion, so this vanishes. */
-.specimen[data-dir='prev'] {
-  animation-name: enter-prev;
-}
-
-/* The outgoing state, sharing the grid cell with the incoming one: it leaves
-   faster than the new state arrives, toward the opposite side. */
-.stage-body > .specimen {
+  --d: 1;
   grid-area: 1 / 1;
+  max-width: 100%;
+  zoom: 1.6;
+  animation: enter var(--void-duration-slow) var(--void-ease-out) both;
 }
 
+.stage[data-enter='prev'],
+.specimen[data-dir='prev'] {
+  --d: -1;
+}
+
+/* The outgoing state shares the grid cell with the incoming one and leaves
+   faster, toward the opposite side. */
 .ghost {
   pointer-events: none;
-  animation: exit-next 280ms var(--void-ease-out) forwards;
-}
-
-.ghost[data-dir='prev'] {
-  animation-name: exit-prev;
-}
-
-@keyframes exit-next {
-  to {
-    opacity: 0;
-    filter: blur(4px);
-    transform: translateX(-2rem);
-  }
-}
-
-@keyframes exit-prev {
-  to {
-    opacity: 0;
-    filter: blur(4px);
-    transform: translateX(2rem);
-  }
+  animation: exit 280ms var(--void-ease-out) forwards;
 }
 
 /* Switching component moves the stage's text with it, from the tab's side. */
-.stage .stage-caption > div,
-.stage .chips {
-  animation: enter-next var(--void-duration-slow) var(--void-ease-out) backwards;
+.stage-caption > div,
+.chips {
+  animation: enter var(--void-duration-slow) var(--void-ease-out) backwards;
 }
 
-.stage[data-enter='prev'] .stage-caption > div,
-.stage[data-enter='prev'] .chips {
-  animation-name: enter-prev;
-}
-
-@keyframes enter-next {
+@keyframes enter {
   from {
     opacity: 0;
     filter: blur(6px);
-    transform: translateX(2rem);
+    transform: translateX(calc(var(--d) * 2rem));
   }
 }
 
-@keyframes enter-prev {
-  from {
+@keyframes exit {
+  to {
     opacity: 0;
-    filter: blur(6px);
-    transform: translateX(-2rem);
+    filter: blur(4px);
+    transform: translateX(calc(var(--d) * -2rem));
   }
 }
 
 .stage-controls {
+  grid-area: controls;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-end;
   gap: var(--void-space-xs);
+  padding: var(--void-space-md) var(--pad);
+  border-top: 1px solid var(--void-border);
 }
 
 .chips {
@@ -418,11 +404,7 @@ h2 {
     border-color var(--void-duration-base) var(--void-ease-out);
 }
 
-.chip:hover {
-  color: var(--void-text-primary);
-  border-color: var(--void-border-strong);
-}
-
+.chip:hover,
 .chip[aria-pressed='true'] {
   color: var(--void-text-primary);
   border-color: var(--void-border-strong);
@@ -450,20 +432,20 @@ h2 {
 }
 
 .stage-caption {
+  grid-area: caption;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   gap: var(--void-space-md);
   padding: var(--void-space-md) var(--pad);
+  border-top: 1px solid var(--void-border);
 }
 
 .stage-caption h3 {
-  margin: 0;
   font-size: var(--void-font-size-body);
 }
 
 .stage-caption p {
-  margin: 0;
   color: var(--void-text-muted);
   font-size: var(--void-font-size-label);
 }
@@ -498,10 +480,7 @@ h2 {
   transition: color var(--void-duration-base) var(--void-ease-out);
 }
 
-.tab:hover {
-  color: var(--void-text-primary);
-}
-
+.tab:hover,
 .tab[aria-pressed='true'] {
   color: var(--void-text-primary);
 }
@@ -517,35 +496,6 @@ h2 {
   transition:
     transform var(--void-duration-slow) var(--void-ease-out),
     width var(--void-duration-slow) var(--void-ease-out);
-}
-
-.stage {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas:
-    'body body'
-    'caption controls';
-}
-
-.stage .stage-body {
-  grid-area: body;
-  min-height: min(44svh, 26rem);
-}
-
-.stage .specimen {
-  zoom: 1.6;
-}
-
-.stage .stage-caption {
-  grid-area: caption;
-  border-top: 1px solid var(--void-border);
-}
-
-.stage .stage-controls {
-  grid-area: controls;
-  justify-content: flex-end;
-  padding: var(--void-space-md) var(--pad);
-  border-top: 1px solid var(--void-border);
 }
 
 /* ---------- Sections ---------- */
@@ -838,18 +788,6 @@ a:hover .arrow {
     animation: rise 600ms var(--void-ease-out) 1150ms backwards;
   }
 
-  /* Install steps assemble as they scroll in, where the browser can tie
-     motion to scroll; elsewhere they are simply there. */
-  @supports (animation-timeline: view()) {
-    .step {
-      animation: rise linear both;
-      animation-timeline: view();
-      animation-range: entry 10% cover 30%;
-    }
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
   /* Page-wide reveal (site/reveal.ts): children of a [data-reveal] block wait
      below and soft, then cascade in reading order once it scrolls into view. */
   [data-reveal] > * {
@@ -928,9 +866,6 @@ a:hover .arrow {
 /* ---------- Narrow screens ---------- */
 
 @media (max-width: 64rem) {
-  .hero-row {
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
   .theming-grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
@@ -955,7 +890,7 @@ a:hover .arrow {
   .nav > :last-child {
     margin-left: auto;
   }
-  .stage .specimen {
+  .specimen {
     zoom: 1.25;
   }
   .stage {
@@ -965,10 +900,10 @@ a:hover .arrow {
       'controls'
       'caption';
   }
-  .stage .stage-controls {
+  .stage-controls {
     justify-content: flex-start;
   }
-  .stage .stage-body {
+  .stage-body {
     min-height: 22rem;
   }
   .hero-row,

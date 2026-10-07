@@ -27,6 +27,8 @@ All colors, spacing, radii, and animation durations are exposed as CSS custom pr
 
 `Button` · `Badge` · `Input` · `Textarea` · `Card` · `Spinner` · `Select` · `Option` · `Checkbox` · `Toggle` · `Dropdown` · `Tooltip`
 
+See every component live: [void-ui-delta.vercel.app](https://void-ui-delta.vercel.app)
+
 Full prop docs and live examples: [Storybook](https://anujpunekar20.github.io/void-ui/)
 
 ## License

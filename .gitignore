@@ -11,3 +11,4 @@ npm-debug.log*
 .vscode
 CLAUDE.md
 docs/superpowers
+site/dist
